@@ -41,7 +41,7 @@ elif [ ${UBUNTU_VER} = '20.04' ]; then
   sudo apt-get install -y --no-install-recommends python2 curl
   curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
   sudo python2 get-pip.py
-  pip install ipython h5py numpy scipy wheel pyopengl
+  pip install ipython h5py numpy scipy wheel
 fi
 if [ ${UBUNTU_VER} = '14.04' ]; then
   sudo apt-get install -y --no-install-recommends qt4-dev-tools zlib-bin
@@ -74,13 +74,15 @@ sudo apt-get install -y --no-install-recommends libboost-all-dev libboost-python
 
 if [ ${UBUNTU_VER} = '18.04' ] || [ ${UBUNTU_VER} = '20.04' ]; then
   # Install opengl
-  pip install pyopengl
+  pip install "pyopengl==3.1.6"
 
   # Install RapidJSON
   mkdir -p ~/git 
   cd ~/git && git clone https://github.com/Tencent/rapidjson.git
-  cd rapidjson && mkdir build && cd build
-  cmake .. && make -j `nproc` && sudo make install
+  cd rapidjson
+  # git checkout ab1842a2dae061284c0a62dca1cc6d5e7e37e346
+  mkdir build && cd build
+  cmake -DRAPIDJSON_BUILD_DOC=OFF -DRAPIDJSON_BUILD_EXAMPLES=OFF -DRAPIDJSON_BUILD_TESTS=OFF .. && make -j `nproc` && sudo make install
 
   # Install Pybind
   cd ~/git && git clone https://github.com/pybind/pybind11.git 
