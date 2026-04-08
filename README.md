@@ -7,6 +7,7 @@ Supported distros:
 * Ubuntu 16.04
 * Ubuntu 18.04
 * Ubuntu 20.04
+* Ubuntu 24.04
 
 ## Travis - Continuous Integration
 
@@ -21,3 +22,7 @@ Run the scripts in the following order:
 ./install-fcl.sh
 ./install-openrave.sh
 ```
+
+For Ubuntu 24.04, the scripts install OpenRAVE with Python 3 bindings and use the
+system OpenSceneGraph package instead of building the older pinned OSG release
+from source.

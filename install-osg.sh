@@ -9,10 +9,18 @@
 # Check ubuntu version
 UBUNTU_VER=$(lsb_release -sr)
 if [ ${UBUNTU_VER} != '14.04' ] && [ ${UBUNTU_VER} != '16.04' ] && [ ${UBUNTU_VER} != '18.04' ] \
-  && [ ${UBUNTU_VER} != '20.04' ]; then
+  && [ ${UBUNTU_VER} != '20.04' ] && [ ${UBUNTU_VER} != '24.04' ]; then
     echo "ERROR: Unsupported Ubuntu version: ${UBUNTU_VER}"
-    echo "  Supported versions are: 14.04, 16.04, 18.04, and 20.04"
+    echo "  Supported versions are: 14.04, 16.04, 18.04, 20.04, and 24.04"
     exit 1
+fi
+
+if [ ${UBUNTU_VER} = '24.04' ]; then
+  echo ""
+  echo "Installing OpenSceneGraph from Ubuntu 24.04 packages..."
+  echo ""
+  sudo apt-get install -y --no-install-recommends libopenscenegraph-dev
+  exit 0
 fi
 
 # OpenSceneGraph

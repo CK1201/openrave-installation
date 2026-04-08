@@ -9,9 +9,9 @@
 # Check ubuntu version
 UBUNTU_VER=$(lsb_release -sr)
 if [ ${UBUNTU_VER} != '14.04' ] && [ ${UBUNTU_VER} != '16.04' ] && [ ${UBUNTU_VER} != '18.04' ] \
-  && [ ${UBUNTU_VER} != '20.04' ]; then
+  && [ ${UBUNTU_VER} != '20.04' ] && [ ${UBUNTU_VER} != '24.04' ]; then
     echo "ERROR: Unsupported Ubuntu version: ${UBUNTU_VER}"
-    echo "  Supported versions are: 14.04, 16.04, 18.04, and 20.04"
+    echo "  Supported versions are: 14.04, 16.04, 18.04, 20.04, and 24.04"
     exit 1
 fi
 
@@ -33,7 +33,14 @@ sudo apt-get update
 
 # Programs
 sudo apt-get install -y --no-install-recommends build-essential cmake doxygen \
-  g++ git octave python-dev python-setuptools wget mlocate
+  g++ git octave wget pkg-config
+if [ ${UBUNTU_VER} = '24.04' ]; then
+  sudo apt-get install -y --no-install-recommends python3-dev python3-setuptools \
+    python3-pip python3-wheel plocate
+else
+  sudo apt-get install -y --no-install-recommends python-dev python-setuptools \
+    mlocate
+fi
 if [ ${UBUNTU_VER} = '14.04' ] || [ ${UBUNTU_VER} = '16.04' ] || [ ${UBUNTU_VER} = '18.04' ]; then
   sudo apt-get install -y --no-install-recommends ipython python-h5py python-numpy \
     python-pip python-wheel python-scipy
@@ -42,23 +49,34 @@ elif [ ${UBUNTU_VER} = '20.04' ]; then
   curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
   sudo python2 get-pip.py
   pip install ipython h5py numpy scipy wheel
+elif [ ${UBUNTU_VER} = '24.04' ]; then
+  sudo apt-get install -y --no-install-recommends ipython3 python3-h5py \
+    python3-numpy python3-opengl python3-pip python3-scipy python3-sympy
 fi
 if [ ${UBUNTU_VER} = '14.04' ]; then
   sudo apt-get install -y --no-install-recommends qt4-dev-tools zlib-bin
 elif [ ${UBUNTU_VER} = '16.04' ] || [ ${UBUNTU_VER} = '18.04' ] || [ ${UBUNTU_VER} = '20.04' ]; then
   sudo apt-get install -y --no-install-recommends qt5-default minizip
+elif [ ${UBUNTU_VER} = '24.04' ]; then
+  sudo apt-get install -y --no-install-recommends qtbase5-dev \
+    qtbase5-dev-tools qtchooser libqt5opengl5-dev libqt5svg5-dev minizip
 fi
 
 # Libraries
 sudo apt-get install -y --no-install-recommends ann-tools libann-dev            \
 libassimp-dev libavcodec-dev libavformat-dev libeigen3-dev libfaac-dev          \
-libflann-dev libfreetype6-dev liblapack-dev libglew-dev libgsm1-dev             \
-libmpfi-dev  libmpfr-dev liboctave-dev libode-dev libogg-dev libpcre3-dev       \
+libflann-dev liblapack-dev libglew-dev libgsm1-dev libmpfi-dev                  \
+libmpfr-dev libode-dev libogg-dev libpcre3-dev                                  \
 libqhull-dev libswscale-dev libtinyxml-dev libvorbis-dev libx264-dev            \
 libxml2-dev libxvidcore-dev libbz2-dev
+if [ ${UBUNTU_VER} = '24.04' ]; then
+  sudo apt-get install -y --no-install-recommends libfreetype-dev octave-dev
+else
+  sudo apt-get install -y --no-install-recommends libfreetype6-dev liboctave-dev
+fi
 if [ ${UBUNTU_VER} = '14.04' ] || [ ${UBUNTU_VER} = '16.04' ] || [ ${UBUNTU_VER} = '18.04' ]; then
   sudo apt-get install -y --no-install-recommends libsoqt-dev-common libsoqt4-dev
-elif [ ${UBUNTU_VER} = '20.04' ]; then
+elif [ ${UBUNTU_VER} = '20.04' ] || [ ${UBUNTU_VER} = '24.04' ]; then
   sudo apt-get install -y --no-install-recommends libsoqt520-dev
 fi
 if [ ${UBUNTU_VER} = '14.04' ]; then
@@ -67,6 +85,11 @@ if [ ${UBUNTU_VER} = '14.04' ]; then
 elif [ ${UBUNTU_VER} = '16.04' ] || [ ${UBUNTU_VER} = '18.04' ] || [ ${UBUNTU_VER} = '20.04' ]; then
   sudo apt-get install -y --no-install-recommends libccd-dev                  \
   libcollada-dom2.4-dp-dev liblog4cxx-dev libminizip-dev octomap-tools
+elif [ ${UBUNTU_VER} = '24.04' ]; then
+  sudo apt-get install -y --no-install-recommends libccd-dev libcoin-dev      \
+  libcollada-dom2.4-dp-dev libgpgme-dev libgpgmepp-dev liblog4cxx-dev         \
+  libminizip-dev libmsgpack-cxx-dev libopenscenegraph-dev libsimage-dev        \
+  octomap-tools pybind11-dev rapidjson-dev
 fi
 
 # Install boost
